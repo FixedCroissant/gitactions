@@ -15,12 +15,13 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
     # Copy file to the remote location.
-    - name: Copy file via scp
-      uses: appleboy/scp-action@master
-      with:
-          HOST: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USER }}
-          PORT: ${{ secrets.PORT }}
-          KEY: ${{ secrets.SSHKEY }}
-          source: "."
-          target: "/var/www/html/test1"
+    - name: Deploy to Server
+      uses: AEnterprise/rsync-deploy@v1.0
+      env:
+        DEPLOY_KEY: ${{ secrets.SSHKEY }}
+        ARGS: "-e -c -r --delete"
+        SERVER_PORT: ${{ secrets.PORT }}
+        FOLDER: "./"
+        SERVER_IP:  ${{ secrets.HOST }}
+        USERNAME: ${{ secrets.USER }}
+        SERVER_DESTINATION: "/var/www/html/test1"
